@@ -4,28 +4,9 @@ import { StyleSheet, TextInput, TouchableOpacity, View,Image } from 'react-nativ
 import * as SecureStore from 'expo-secure-store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text } from '@rneui/themed'
-import axiosConfig from "../config/axios";
-import axios from 'axios'
+
 
 export default function Login({navigation}) {
-  const [username, setUsername] = useState(null)
-  const [password, setPassword] = useState(null)
-  const [userInfo, setUserInfo]=useState ({});
-
-  const login =(username,password) =>{
-    axios.post(`${axiosConfig}login`,{
-      username,password
-    }).then(res=> {
-      let userInfo = res.data;
-      setUserInfo(userInfo)
-      SecureStore.setItemAsync('token','123456')
-      AsyncStorage.setItem('userInfo',JSON.stringify(userInfo))
-      setResultado('Login feito com suecesso')
-      navigation.navigate('Home')
-    }).catch(e => {
-      console.log(`falha ao logar ${e}`)
-    })
-  }
 
   const [resultado, setResultado] = useState('Digite seus dados')
   const [email, setEmail] = useState('')
@@ -83,6 +64,7 @@ export default function Login({navigation}) {
         <TouchableOpacity style={styles.buttonLogin} onPress={logar}>
             <Text style={styles.titleButtonLogin}>login</Text>
         </TouchableOpacity>
+        <Text style={styles.alert}>{resultado}</Text>
         <StatusBar style="auto" />
     </View>
   );
@@ -133,4 +115,11 @@ const styles = StyleSheet.create({
       width: '70%',
       height: 150,
       },
+      alert: {
+        marginTop: 5,
+        fontSize: 17,
+        color: '#FFF',
+        paddingBottom: .5,
+        fontWeight: 'bold',
+      }
   });

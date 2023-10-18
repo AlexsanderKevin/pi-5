@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 import {Text, Button} from "@rneui/themed"
 import { useEffect,useState } from "react"
 import axiosConfig from "../config/axios";
@@ -10,12 +10,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from 'expo-secure-store'
 
 export default function Home({navigation}){
-    const [equipamento, setEquipamentos] = useState([])
+    const [equipamentos, setEquipamentos] = useState([])
     const [nomeUser, setNomeUser] = useState('')
 
     useEffect(()=>{
-        axiosConfig.get('equipamento').then((resposta)=>{
-            setEquipamentos(resposta.data.equipamento)
+        axiosConfig.get('equipamentos').then((resposta)=>{
+            setEquipamentos(resposta.data.products)
         })
         .catch(()=>{
             alert('Erro ao conectar')
@@ -32,30 +32,24 @@ export default function Home({navigation}){
         navigation.navigate('Login')
     }
     return(
-        <ScrollView style={styles.container}>
-            <Text>recentes</Text>
+        <ScrollView style={styles.listcontainer}>
+            <Text style={styles.titulo}>Recentes</Text>
             {
-                equipamento.length<=0 &&(
-                    <Text>Nenhum produto encontrado</Text>
+                equipamentos.length<=0 &&(
+                    <Text style={styles.titulo}>Nenhum equipamento encontrado</Text>
                 )
             }
                 {
-                    equipamento.map((equipamento) => (
-                        <ListItem style={styles.list} key={equipamento.id} onPress={()=>{
-                            navigation.navigate("Equipamento",{equipamento})
-                        }}> 
-                            <ListItemContent>
-                                <ListItemTitle>
-                                    {equipamento.id}
+                    equipamentos.map((equipamento) => (
+                        <ListItem key={equipamento.id} style={styles.list} containerStyle={{ backgroundColor: "#353535" }}> 
+                            <ListItemContent >
+                                <ListItemTitle style={styles.texto}>
+                                    {equipamento.id_equipamento} {equipamento.nome}
                                 </ListItemTitle>
-                                <ListItemSubtitle>
-                                    ${equipamento.descricao}
-                                </ListItemSubtitle>
                             </ListItemContent>
                         </ListItem>
                     ))
                 }
-            <Divider/>
             <Button  title='Sair' onPress={sair}></Button>
         </ScrollView>
     );
@@ -63,24 +57,36 @@ export default function Home({navigation}){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 15,
         backgroundColor: '#353535',
         justifyContent: 'center',
         alignItems: 'center',
+        rowGap: 5,
     },
-    titleInput: {
+    listcontainer:{
+        padding: 15,
+        backgroundColor: '#353535',
+    },
+    titulo:{
         marginTop: 5,
+        marginLeft: 0,
         fontSize: 17,
         color: '#FFF',
-        paddingBottom: .5
+        paddingBottom: .5,
+        alignSelf:'flex-start',
+    },
+    texto:{
+        marginTop: 5,
+        marginLeft: 0,
+        fontSize: 17,
+        color: '#FFF',
+        paddingBottom: .5,
+        alignSelf:'flex-start',
     },
     list: {
-        marginBottom: 10,
-        padding: 5,
         borderRadius: 5,
-        fontSize: 17,
-        color: '#FFF',
-        borderColor: 'white',
-        borderWidth: 1
-    },
-  });
+        borderColor: 'gray',
+        borderWidth: 1,
+        width: '80%',
+        
+    }
+});
