@@ -15,7 +15,7 @@ export default function Home({navigation}){
 
     useEffect(()=>{
         axiosConfig.get('equipamentos').then((resposta)=>{
-            setEquipamentos(resposta.data.products)
+            setEquipamentos(resposta.data.equipamentos)
         })
         .catch(()=>{
             alert('Erro ao conectar')
