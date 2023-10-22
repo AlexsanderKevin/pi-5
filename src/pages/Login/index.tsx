@@ -4,8 +4,7 @@ import { StyleSheet, TextInput, TouchableOpacity, View,Image } from 'react-nativ
 import * as SecureStore from 'expo-secure-store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text } from '@rneui/themed'
-import axiosConfig from "../../../config/axios";
-import axios from 'axios'
+import api from '../../services/api'
 
 export default function Login({navigation}) {
   const [username, setUsername] = useState(null)
@@ -13,8 +12,8 @@ export default function Login({navigation}) {
   const [userInfo, setUserInfo]=useState ({});
 
   const login =(username,password) =>{
-    axios.post(`${axiosConfig}login`,{
-      username,password
+    api.get(`login`,{
+      //username,password
     }).then(res=> {
       let userInfo = res.data;
       setUserInfo(userInfo)
@@ -53,7 +52,7 @@ export default function Login({navigation}) {
     SecureStore.getItemAsync('token')
     .then((token)=>{
       if(token!=null){
-        navigation.navigate('EquipmentForm')
+        navigation.navigate('Home')
       }
     })
   },[])

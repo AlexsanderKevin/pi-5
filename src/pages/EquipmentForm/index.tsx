@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import api from '../../services/api'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -13,8 +14,13 @@ export default function EquipmentForm() {
     const [ unidade_medida, setUnidadeMedida ] = useState('')
     const [ prioridade, setPrioridade ] = useState('')
 
+
+
     const postEquipment = (body) => {
-        const url = `https://45.190.111.28:3001/equipamentos`
+        api.get('/equipamentos')
+        .then((res) => {console.log(res)})
+        .catch((error) => {console.log(error.message)})
+        /*const url = `http://45.190.111.28:3001/equipamentos`
         fetch(url, {
             method: 'POST',
             headers: {
@@ -24,7 +30,7 @@ export default function EquipmentForm() {
             body: JSON.stringify(body)
         })
         .then(response => console.log(response.json()))
-        .catch(error => console.error('Erro:', error.message))
+        .catch(error => console.error('Erro:', error.message))*/
     }
 
     const handleSubmit = () => {

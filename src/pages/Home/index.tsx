@@ -1,12 +1,12 @@
 import { StyleSheet, ScrollView, View } from "react-native";
 import {Text, Button} from "@rneui/themed"
 import { useEffect,useState } from "react"
-import axiosConfig from "../../../config/axios";
 import { Avatar, Divider, ListItem } from "@rneui/base";
 import { ListItemContent } from "@rneui/base/dist/ListItem/ListItem.Content";
 import { ListItemTitle } from "@rneui/base/dist/ListItem/ListItem.Title";
 import { ListItemSubtitle } from "@rneui/base/dist/ListItem/ListItem.Subtitle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import api from '../../services/api'
 import * as SecureStore from 'expo-secure-store'
 
 export default function Home({navigation}){
@@ -14,16 +14,14 @@ export default function Home({navigation}){
     const [nomeUser, setNomeUser] = useState('')
 
     useEffect(()=>{
-        axiosConfig.get('equipamento').then((resposta)=>{
-            setEquipamentos(resposta.data.equipamento)
-        })
-        .catch(()=>{
-            alert('Erro ao conectar')
-        })
-        AsyncStorage.getItem('user')
+        api.get('/equipamentos')
+        .then((res) => {setEquipamentos(res.data)})
+        .catch((error) => {console.log(error.message)})
+
+        /*AsyncStorage.getItem('user')
         .then((user)=>{
             setNomeUser(user)
-        })
+        })*/
     },[])
 
     async function sair(){
