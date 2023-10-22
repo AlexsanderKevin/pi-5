@@ -1,7 +1,7 @@
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 import {Text, Button} from "@rneui/themed"
 import { useEffect,useState } from "react"
-import axiosConfig from "../config/axios";
+import axiosConfig from "../../../config/axios";
 import { Avatar, Divider, ListItem } from "@rneui/base";
 import { ListItemContent } from "@rneui/base/dist/ListItem/ListItem.Content";
 import { ListItemTitle } from "@rneui/base/dist/ListItem/ListItem.Title";
@@ -32,41 +32,44 @@ export default function Home({navigation}){
         navigation.navigate('Login')
     }
     return(
-        <ScrollView style={styles.container}>
-            <Text>recentes</Text>
-            {
-                equipamento.length<=0 &&(
-                    <Text>Nenhum produto encontrado</Text>
-                )
-            }
+        <View style={styles.container}>
+            <ScrollView style={styles.containerScrollView}>
+                <Text>recentes</Text>
                 {
-                    equipamento.map((equipamento) => (
-                        <ListItem style={styles.list} key={equipamento.id} onPress={()=>{
-                            navigation.navigate("Equipamento",{equipamento})
-                        }}> 
-                            <ListItemContent>
-                                <ListItemTitle>
-                                    {equipamento.id}
-                                </ListItemTitle>
-                                <ListItemSubtitle>
-                                    ${equipamento.descricao}
-                                </ListItemSubtitle>
-                            </ListItemContent>
-                        </ListItem>
-                    ))
+                    equipamento.length<=0 &&(
+                        <Text>Nenhum produto encontrado</Text>
+                    )
                 }
-            <Divider/>
-            <Button  title='Sair' onPress={sair}></Button>
-        </ScrollView>
+                    {
+                        equipamento.map((equipamento) => (
+                            <ListItem style={styles.list} key={equipamento.id} onPress={()=>{
+                                navigation.navigate("Equipamento",{equipamento})
+                            }}> 
+                                <ListItemContent>
+                                    <ListItemTitle>
+                                        {equipamento.id}
+                                    </ListItemTitle>
+                                    <ListItemSubtitle>
+                                        ${equipamento.descricao}
+                                    </ListItemSubtitle>
+                                </ListItemContent>
+                            </ListItem>
+                        ))
+                    }
+                <Divider/>
+                <Button  title='Sair' onPress={sair}></Button>
+            </ScrollView>
+        </View>
     );
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 15,
-        backgroundColor: '#353535',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: '#353535'
+    },
+    containerScrollView: {
+
     },
     titleInput: {
         marginTop: 5,

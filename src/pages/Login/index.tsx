@@ -4,7 +4,7 @@ import { StyleSheet, TextInput, TouchableOpacity, View,Image } from 'react-nativ
 import * as SecureStore from 'expo-secure-store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text } from '@rneui/themed'
-import axiosConfig from "../config/axios";
+import axiosConfig from "../../../config/axios";
 import axios from 'axios'
 
 export default function Login({navigation}) {
@@ -53,14 +53,14 @@ export default function Login({navigation}) {
     SecureStore.getItemAsync('token')
     .then((token)=>{
       if(token!=null){
-        navigation.navigate('Home')
+        navigation.navigate('EquipmentForm')
       }
     })
   },[])
 
   return (
     <View style={styles.container}>
-      <Image style={styles.item} source={require("../assets/images/logo.png") }resizeMode='contain' />
+      <Image style={styles.item} source={require("../../assets/images/logo.png") }resizeMode='contain' />
       <Text style={styles.titleInput}>Email</Text>
       <TextInput
                 style={styles.input}
