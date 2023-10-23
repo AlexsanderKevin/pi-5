@@ -14,35 +14,22 @@ export default function EquipmentForm() {
     const [ unidade_medida, setUnidadeMedida ] = useState('')
     const [ prioridade, setPrioridade ] = useState('')
 
-
-
     const postEquipment = (body) => {
-        api.get('/equipamentos')
-        .then((res) => {console.log(res)})
-        .catch((error) => {console.log(error.message)})
-        /*const url = `http://45.190.111.28:3001/equipamentos`
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJkYXZpZEBlbWFpbC5jb20uYnIiLCJsb2dpbiI6ImRhdmlkIiwiaWF0IjoxNjk3OTQxMjA5LCJleHAiOjE2OTc5NDQ4MDl9.VRA6uwJwmL3_kcoNLbWZurGHlV9FfQis8YQWW0T8pEY'
-            },
-            body: JSON.stringify(body)
-        })
-        .then(response => console.log(response.json()))
-        .catch(error => console.error('Erro:', error.message))*/
-    }
-
-    const handleSubmit = () => {
-        const body = {
-            nome,
+        api.post('/equipamentos', {
+            nome: nome,
             codigo_sap: sap,
             id_tipo: tipo,
-            descricao,
-            unidade_medida,
-            prioridade
-        }
-        postEquipment(body)
+            descricao: descricao,
+            unidade_medida: unidade_medida,
+            prioridade: prioridade
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJkYXZpZEBlbWFpbC5jb20uYnIiLCJsb2dpbiI6ImRhdmlkIiwiaWF0IjoxNjk4MDI3NDI2LCJleHAiOjE2OTgwMzEwMjZ9.tmO7NBpo2yUun5r-ESOMacc-URuB2-8V_U_XZoa-soo'
+            }
+        })
+        .then((res) => {console.log(res)})
+        .catch((error) => {console.log(error.message)})
     }
 
     return (
@@ -101,7 +88,7 @@ export default function EquipmentForm() {
                 placeholderTextColor="#848484"
             />
 
-            <TouchableOpacity style={styles.buttonAdicionar} onPress={handleSubmit}>
+            <TouchableOpacity style={styles.buttonAdicionar} onPress={postEquipment}>
                 <Text style={styles.titleButtonAdicionar}>Adicionar +</Text>
             </TouchableOpacity>
         </View>
