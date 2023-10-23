@@ -11,15 +11,15 @@ export default function Login({navigation}) {
   const [password, setPassword] = useState(null)
   const [userInfo, setUserInfo]=useState ({});
 
-  const login =(username,password) =>{
-    api.get(`login`,{
-      //username,password
+  const login = (username,password) =>{
+    api.post('/login',{
+      data: {login: username, senha: password}
     }).then(res=> {
-      let userInfo = res.data;
-      setUserInfo(userInfo)
-      SecureStore.setItemAsync('token','123456')
-      AsyncStorage.setItem('userInfo',JSON.stringify(userInfo))
-      setResultado('Login feito com suecesso')
+      let token = res.data;
+      setUserInfo(username)
+      SecureStore.setItemAsync('token', token)
+      AsyncStorage.setItem('user', username)
+      setResultado('Login feito com sucesso')
       navigation.navigate('Home')
     }).catch(e => {
       console.log(`falha ao logar ${e}`)
@@ -37,15 +37,7 @@ export default function Login({navigation}) {
       return
     }
 
-    if(email == 'admin' && senha == '1234'){
-      SecureStore.setItemAsync('token','123456')
-      AsyncStorage.setItem('user','Administrador')
-      
-      setResultado('Login feito com suecesso')
-      navigation.navigate('Home')
-    } else {
-      setResultado('Login ou senha inválidos!')
-    }
+    login(email, senha)
   }
 
   useEffect(()=>{
