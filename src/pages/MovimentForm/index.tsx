@@ -1,15 +1,20 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button } from 'react-native'
 import api from '../../services/api'
-
-import { useNavigation } from '@react-navigation/native'
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from 'expo-secure-store'
+
+import { useNavigation } from '@react-navigation/native'
 import { Divider } from '@rneui/base';
 
-export default function EquipmentForm({navigation}) {
+export default function MovimentForm({navigation}) {
     const navigate = useNavigation()
+
+
+    const [ status, setStatus ] = useState('')
+    const [ zona, setZona ] = useState('')
+    const [ quantidade, setQuantidade ] = useState('')
+    const [ observacao, setObservacao ] = useState('')
 
     const [ nome, setNome ] = useState('')
     const [ sap, setSap ] = useState('')
@@ -24,12 +29,12 @@ export default function EquipmentForm({navigation}) {
         await AsyncStorage.removeItem('user')
         navigation.navigate('Login')
     }
-    
-    const postEquipment = (body) => {
-        api.get('/equipamentos')
+
+    const postMoviment = (body) => {
+        api.post('/movimentacoes')
         .then((res) => {console.log(res)})
         .catch((error) => {console.log(error.message)})
-        /*const url = `http://45.190.111.28:3001/equipamentos`
+        /*const url = `http://45.190.111.28:3001/movimentacoes`
         fetch(url, {
             method: 'POST',
             headers: {
@@ -42,78 +47,77 @@ export default function EquipmentForm({navigation}) {
         .catch(error => console.error('Erro:', error.message))*/
     }
 
+
     const handleSubmit = () => {
         const body = {
-            nome,
-            codigo_sap: sap,
-            id_tipo: tipo,
-            descricao,
-            unidade_medida,
-            prioridade
+            //id_equipamento,
+            id_zona: zona,
+            //id_responsavel,
+            //data_entrega,
+            //data_saida,
+            status,
+            quantidade,
+            observacao
         }
-        postEquipment(body)
+        postMoviment(body)
     }
+
+    // const handleSubmit1 = () => {
+    //     const body = {
+    //         //id_equipamento,
+    //         id_zona: zona,
+    //         //id_responsavel,
+    //         //data_entrega,
+    //         //data_saida,
+    //         status,
+    //         quantidade,
+    //         observacao
+    //     }
+    //     putMoviment(body)
+    // }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.titleInput}>Nome</Text>
+            <Text style={styles.titleInput}>Status</Text>
             <TextInput
                 style={styles.input}
-                value={nome}
-                onChangeText={setNome}
-                placeholder='Teclado sem fio'
+                value={status}
+                onChangeText={setStatus}
+                placeholder='Em andamento'
                 placeholderTextColor="#848484"
             />
 
-            <Text style={styles.titleInput}>Código SAP</Text>
+            <Text style={styles.titleInput}>Zona</Text>
             <TextInput
                 style={styles.input}
-                value={sap}
-                onChangeText={setSap}
-                placeholder='1234'
+                value={zona}
+                onChangeText={setZona}
+                placeholder='Armario 1'
                 placeholderTextColor="#848484"
             />
 
-            <Text style={styles.titleInput}>Tipo</Text>
+            <Text style={styles.titleInput}>Quantidade</Text>
             <TextInput
                 style={styles.input}
-                value={tipo}
-                onChangeText={setTipo}
-                placeholder='Periferico'
+                value={quantidade}
+                onChangeText={setQuantidade}
+                placeholder='1'
                 placeholderTextColor="#848484"
             />
 
-            <Text style={styles.titleInput}>Descrição</Text>
+            <Text style={styles.titleInput}>Observacao</Text>
             <TextInput
-                style={styles.input}
-                value={descricao}
-                onChangeText={setDescricao}
-                placeholder='Teclado logitech sem fio'
+                style={styles.inputObs}
+                value={observacao}
+                onChangeText={setObservacao}
+                placeholder='fulano@email.com'
                 placeholderTextColor="#848484"
             />
 
-            <Text style={styles.titleInput}>Unidade de Medida</Text>
-            <TextInput
-                style={styles.input}
-                value={unidade_medida}
-                onChangeText={setUnidadeMedida}
-                placeholder='Unidade, Kg, etc'
-                placeholderTextColor="#848484"
-            />
-
-            <Text style={styles.titleInput}>Prioridade</Text>
-            <TextInput
-                style={styles.input}
-                value={prioridade}
-                onChangeText={setPrioridade}
-                placeholder='1, 2 ou 3'
-                placeholderTextColor="#848484"
-            />
-
-            <TouchableOpacity style={styles.buttonAdicionar} onPress={handleSubmit}>
-                <Text style={styles.titleButtonAdicionar}>Adicionar +</Text>
+            <TouchableOpacity style={styles.buttonMover} onPress={handleSubmit}>
+                <Text style={styles.titleButtonMover}> Mover </Text>
             </TouchableOpacity>
-            
+
             <Divider/>
                 <Button  title='Sair' onPress={sair}></Button>
         </View>
@@ -141,7 +145,18 @@ const styles = StyleSheet.create({
         borderColor: 'white',
         borderWidth: 1
     },
-    buttonAdicionar: {
+    inputObs: {
+        marginBottom: 10,
+        padding: 5,
+        borderRadius: 5,
+        height: 120,
+        fontSize: 17,
+        
+        color: '#FFF',
+        borderColor: 'white',
+        borderWidth: 1
+    },
+    buttonMover: {
         marginTop: 10,
         paddingVertical: 10,
         width: '100%',
@@ -150,7 +165,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F0865B'
     },
-    titleButtonAdicionar: {
+    titleButtonMover: {
         color: '#FFF',
         fontSize: 17
     }

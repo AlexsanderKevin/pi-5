@@ -21,6 +21,7 @@ export default function Login({navigation}) {
       AsyncStorage.setItem('userInfo',JSON.stringify(userInfo))
       setResultado('Login feito com suecesso')
       navigation.navigate('Home')
+      //navigation.navigate('MovimentForm')
     }).catch(e => {
       console.log(`falha ao logar ${e}`)
     })
@@ -43,6 +44,7 @@ export default function Login({navigation}) {
       
       setResultado('Login feito com suecesso')
       navigation.navigate('Home')
+      //navigation.navigate('MovimentForm')
     } else {
       setResultado('Login ou senha inválidos!')
     }
@@ -53,6 +55,7 @@ export default function Login({navigation}) {
     .then((token)=>{
       if(token!=null){
         navigation.navigate('Home')
+        //navigation.navigate('MovimentForm')
       }
     })
   },[])
