@@ -45,6 +45,7 @@ export default function Home({navigation}){
                         equipamento.map((equipamento) => (
                             <ListItem style={styles.list} key={equipamento.id} onPress={()=>{
                                 navigation.navigate("Equipamento",{equipamento})
+                                // navigation.navigate("Equipamento")
                             }}> 
                                 <ListItemContent>
                                     <ListItemTitle>
