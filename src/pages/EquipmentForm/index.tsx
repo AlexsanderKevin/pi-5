@@ -4,6 +4,7 @@ import api from '../../services/api'
 
 import { useNavigation } from '@react-navigation/native'
 import Footer from '../../components/Footer/Footer'
+import Header from '../../components/Header/Header'
 
 export default function EquipmentForm({ navigation }) {
     const navigate = useNavigation()
@@ -35,6 +36,7 @@ export default function EquipmentForm({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <Header/>
             <Text style={styles.titleInput}>Nome</Text>
             <TextInput
                 style={styles.input}
