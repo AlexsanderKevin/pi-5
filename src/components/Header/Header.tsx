@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
     paddingRight: 10
   },
   headerShadow: {
-    height: 100
+    height: 60
   },
   linkText: {
-    color: '#F0865B',
+    color: '#ffffff',
   },
   button: {
     display: 'flex',
