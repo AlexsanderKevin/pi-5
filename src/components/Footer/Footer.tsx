@@ -1,17 +1,36 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { House, ListPlus, QrCode } from 'phosphor-react-native'
+import { useRoute } from '@react-navigation/native'
 
 export default function Footer({ navigation }) {
+  const route = useRoute()
+  const currentRoute = route.name
+
   return (
     <View style={styles.footer}>
-      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-        <Text style={styles.link}>Home</Text>
+      <TouchableOpacity 
+        style={styles.linkButton} 
+        onPress={() => navigation.navigate('EquipmentForm')}
+      >
+        <ListPlus style={currentRoute === 'EquipmentForm' ? styles.activeLink : styles.linkText} size={25}/>
+        <Text style={currentRoute === 'EquipmentForm' ? styles.activeLink : styles.linkText}>Adicionar</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('EquipmentForm')}>
-        <Text style={styles.link}>Add</Text>
+
+      <TouchableOpacity 
+        style={styles.linkButton} 
+        onPress={() => navigation.navigate('Home')}
+      >
+        <House style={currentRoute === 'Home' ? styles.activeLink : styles.linkText} size={25}/>
+        <Text style={currentRoute === 'Home' ? styles.activeLink : styles.linkText}>Inicio</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Contact')}>
-        <Text style={styles.link}>QR Code</Text>
+
+      <TouchableOpacity 
+        style={styles.linkButton} 
+        onPress={() => navigation.navigate('QrCode')}
+      >
+        <QrCode style={currentRoute === 'QrCode' ? styles.activeLink : styles.linkText} size={25}/>
+        <Text style={currentRoute === 'QrCode' ? styles.activeLink : styles.linkText}>QR Code</Text>
       </TouchableOpacity>
     </View>
   );
@@ -29,9 +48,19 @@ const styles = StyleSheet.create({
     right: 0,
     left: 0,
   },
-  link: {
+  linkText: {
     color: '#ffffff',
     opacity: .54,
-    padding: 15
+  },
+  linkButton: {
+    color: '#ffffff',
+    padding: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  activeLink: {
+    color: '#F0865B',
+    opacity: 1
   }
 })
