@@ -9,26 +9,17 @@ export default function Footer({ navigation }) {
 
   return (
     <View style={styles.footer}>
-      <TouchableOpacity 
-        style={styles.linkButton} 
-        onPress={() => navigation.navigate('EquipmentForm')}
-      >
+      <TouchableOpacity style={styles.linkButton} onPress={() => navigation.navigate('EquipmentForm')} >
         <ListPlus style={currentRoute === 'EquipmentForm' ? styles.activeLink : styles.linkText} size={25}/>
         <Text style={currentRoute === 'EquipmentForm' ? styles.activeLink : styles.linkText}>Adicionar</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity 
-        style={styles.linkButton} 
-        onPress={() => navigation.navigate('Home')}
-      >
+      <TouchableOpacity style={styles.linkButton} onPress={() => navigation.navigate('Home')} >
         <House style={currentRoute === 'Home' ? styles.activeLink : styles.linkText} size={25}/>
         <Text style={currentRoute === 'Home' ? styles.activeLink : styles.linkText}>Inicio</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity 
-        style={styles.linkButton} 
-        onPress={() => navigation.navigate('QrCode')}
-      >
+      <TouchableOpacity style={styles.linkButton} onPress={() => navigation.navigate('QrCode')} >
         <QrCode style={currentRoute === 'QrCode' ? styles.activeLink : styles.linkText} size={25}/>
         <Text style={currentRoute === 'QrCode' ? styles.activeLink : styles.linkText}>QR Code</Text>
       </TouchableOpacity>
