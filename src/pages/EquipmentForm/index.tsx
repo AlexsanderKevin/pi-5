@@ -3,8 +3,9 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-nativ
 import api from '../../services/api'
 
 import { useNavigation } from '@react-navigation/native'
+import Footer from '../../components/Footer/Footer'
 
-export default function EquipmentForm() {
+export default function EquipmentForm({ navigation }) {
     const navigate = useNavigation()
 
     const [ nome, setNome ] = useState('')
@@ -91,6 +92,7 @@ export default function EquipmentForm() {
             <TouchableOpacity style={styles.buttonAdicionar} onPress={postEquipment}>
                 <Text style={styles.titleButtonAdicionar}>Adicionar +</Text>
             </TouchableOpacity>
+            <Footer navigation={navigation}/>
         </View>
     )
 }

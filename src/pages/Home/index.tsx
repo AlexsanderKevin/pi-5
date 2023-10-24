@@ -8,6 +8,7 @@ import { ListItemSubtitle } from "@rneui/base/dist/ListItem/ListItem.Subtitle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from '../../services/api'
 import * as SecureStore from 'expo-secure-store'
+import Footer from "../../components/Footer/Footer";
 
 export default function Home({navigation}){
     const [equipamento, setEquipamentos] = useState([])
@@ -57,6 +58,7 @@ export default function Home({navigation}){
                 <Divider/>
                 <Button  title='Sair' onPress={sair}></Button>
             </ScrollView>
+            <Footer navigation={navigation}/>
         </View>
     );
 }
