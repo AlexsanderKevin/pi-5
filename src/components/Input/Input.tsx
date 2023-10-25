@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, TextInput, StyleSheet, View } from "react-native";
 
-export default function Input({ label, ...props }) {
+export default function Input({ label, value, ...props }) {
   const [ isFocused, setIsFocused ] = useState(false)
+  const [ isValid, setIsValid ] = useState(false)
+
+  useEffect(() => setIsValid(value), [ value ])
 
   const handleFocus = () => setIsFocused(true)
-  const handleBlur = () => setIsFocused(false)
+  const handleBlur = () => {setIsFocused(false)}
 
   return (
     <View style={styles.inputContainer}>
@@ -15,7 +18,7 @@ export default function Input({ label, ...props }) {
         { label }
       </Text>
       <TextInput 
-        style={[ styles.input, isFocused ? styles.activeInput : null]} 
+        style={[ styles.input, isFocused || isValid ? styles.activeInput : null]} 
         placeholderTextColor="#848484"
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -24,6 +27,7 @@ export default function Input({ label, ...props }) {
     </View>
   )
 }
+
 const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
