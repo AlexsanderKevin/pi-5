@@ -5,7 +5,7 @@ import { Text } from "react-native";
 export default function ButtonMain({ children, style, ...props }) {
   return (
     <TouchableOpacity style={[ styles.buttonLogin, style ]} {...props}>
-      <Text style={styles.titleButtonLogin}>login</Text>
+      <Text style={styles.titleButtonLogin}>{ children }</Text>
     </TouchableOpacity>
   )
 }
