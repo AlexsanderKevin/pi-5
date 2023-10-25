@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text } from '@rneui/themed'
 import api from '../../services/api'
 import Input from '../../components/Input/Input'
+import ButtonMain from '../../components/ButtonMain/ButtonMain'
 
 export default function Login({navigation}) {
   const [username, setUsername] = useState(null)
@@ -68,9 +69,12 @@ export default function Login({navigation}) {
         secureTextEntry={true}
       />
 
-        <TouchableOpacity style={styles.buttonLogin} onPress={logar}>
-            <Text style={styles.titleButtonLogin}>login</Text>
-        </TouchableOpacity>
+        <ButtonMain 
+          style={styles.buttonLogin} 
+          onPress={logar}
+        >
+          login
+        </ButtonMain>
         <StatusBar style="auto" />
     </View>
   );
@@ -86,17 +90,8 @@ const styles = StyleSheet.create({
         rowGap: 5,
     },
     buttonLogin: {
-        marginTop: 10,
-        paddingVertical: 10,
-        width: '40%',
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F0865B'
-    },
-    titleButtonLogin: {
-        color: '#FFF',
-        fontSize: 17
+        width: '50%',
+        marginTop: 30
     },
     item: {
       aspectRatio:1,
