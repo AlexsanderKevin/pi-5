@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import * as SecureStore from 'expo-secure-store'
 import api from '../../services/api'
 
 import { useNavigation } from '@react-navigation/native'
@@ -19,22 +20,27 @@ export default function EquipmentForm({ navigation }) {
     const [ unidade_medida, setUnidadeMedida ] = useState('')
     const [ prioridade, setPrioridade ] = useState('')
 
-    const postEquipment = (body) => {
-        api.post('/equipamentos', {
-            nome: nome,
-            codigo_sap: sap,
-            id_tipo: tipo,
-            descricao: descricao,
-            unidade_medida: unidade_medida,
-            prioridade: prioridade
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization' : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJkYXZpZEBlbWFpbC5jb20uYnIiLCJsb2dpbiI6ImRhdmlkIiwiaWF0IjoxNjk4MDI3NDI2LCJleHAiOjE2OTgwMzEwMjZ9.tmO7NBpo2yUun5r-ESOMacc-URuB2-8V_U_XZoa-soo'
+    const postEquipment = () => {
+        SecureStore.getItemAsync('token')
+        .then((token) => {
+            if(token){
+                api.post('/equipamentos', {
+                    nome: nome,
+                    codigo_sap: sap,
+                    id_tipo: tipo,
+                    descricao: descricao,
+                    unidade_medida: unidade_medida,
+                    prioridade: prioridade
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization : token
+                    }
+                })
+                .then(() => {navigation.navigate('Home')})
+                .catch((error) => {console.log(error.message)})
             }
         })
-        .then((res) => {console.log(res)})
-        .catch((error) => {console.log(error.message)})
     }
 
     return (
