@@ -10,6 +10,7 @@ import api from '../../services/api'
 import * as SecureStore from 'expo-secure-store'
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
+import Scroll from "../../components/Scroll/Scroll";
 
 export default function Home({navigation}){
     const [equipamento, setEquipamentos] = useState([])
@@ -34,7 +35,7 @@ export default function Home({navigation}){
     return(
         <View style={styles.container}>
             <Header/>
-            <ScrollView style={styles.containerScrollView}>
+            <Scroll>
                 <Text>recentes</Text>
                 {
                     equipamento.length<=0 &&(
@@ -60,7 +61,7 @@ export default function Home({navigation}){
                     }
                 <Divider/>
                 <Button  title='Sair' onPress={sair}></Button>
-            </ScrollView>
+            </Scroll>
             <Footer navigation={navigation}/>
         </View>
     );
@@ -70,9 +71,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 15,
         backgroundColor: '#353535'
-    },
-    containerScrollView: {
-
     },
     titleInput: {
         marginTop: 5,

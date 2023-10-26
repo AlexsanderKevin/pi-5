@@ -5,6 +5,8 @@ import * as SecureStore from 'expo-secure-store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text } from '@rneui/themed'
 import api from '../../services/api'
+import Input from '../../components/Input/Input'
+import ButtonMain from '../../components/ButtonMain/ButtonMain'
 
 export default function Login({navigation}) {
   const [username, setUsername] = useState(null)
@@ -52,28 +54,27 @@ export default function Login({navigation}) {
   return (
     <View style={styles.container}>
       <Image style={styles.item} source={require("../../assets/images/logo.png") }resizeMode='contain' />
-      <Text style={styles.titleInput}>Email</Text>
-      <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                placeholder='fulano@email.com'
-                placeholderTextColor="#848484"
-        />
+      <Input
+        label='Email'
+        value={email}
+        onChangeText={setEmail}
+        placeholder='fulano@email.com'
+      />
 
-      <Text style={styles.titleInput}>Senha</Text>
-      <TextInput
-                style={styles.input}
-                value={senha}
-                onChangeText={setSenha}
-                placeholder='******'
-                secureTextEntry={true}
-                placeholderTextColor="#848484"
-        />
+      <Input
+        label={'Senha'}
+        value={senha}
+        onChangeText={setSenha}
+        placeholder='******'
+        secureTextEntry={true}
+      />
 
-        <TouchableOpacity style={styles.buttonLogin} onPress={logar}>
-            <Text style={styles.titleButtonLogin}>login</Text>
-        </TouchableOpacity>
+        <ButtonMain 
+          style={styles.buttonLogin} 
+          onPress={logar}
+        >
+          login
+        </ButtonMain>
         <StatusBar style="auto" />
     </View>
   );
@@ -82,46 +83,20 @@ export default function Login({navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 15,
+        padding: 40,
         backgroundColor: '#353535',
         justifyContent: 'center',
         alignItems: 'center',
         rowGap: 5,
     },
-    titleInput: {
-        marginTop: 5,
-        marginLeft: 40,
-        fontSize: 17,
-        color: '#FFF',
-        paddingBottom: .5,
-        alignSelf:'flex-start',
-    },
-    input: {
-        marginBottom: 10,
-        padding: 5,
-        borderRadius: 5,
-        fontSize: 17,
-        color: '#FFF',
-        borderColor: 'white',
-        borderWidth: 1,
-        width: '80%',
-    },
     buttonLogin: {
-        marginTop: 10,
-        paddingVertical: 10,
-        width: '40%',
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F0865B'
-    },
-    titleButtonLogin: {
-        color: '#FFF',
-        fontSize: 17
+        width: '50%',
+        marginTop: 30
     },
     item: {
       aspectRatio:1,
       width: '70%',
-      height: 150,
+      height: 130,
+      marginBottom: 50
       },
   });

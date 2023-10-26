@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     left: 0,
+    height: 60,
   },
   linkText: {
     color: '#ffffff',
