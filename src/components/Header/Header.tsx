@@ -14,22 +14,18 @@ export default function Header() {
   }
 
   return (
-    <>
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.button}
-          onPress={handleGoback}
-        >
-          <ArrowLeft style={styles.linkText} />
-          <Text style={styles.linkText}>
-            {navigation.canGoBack() ? 'Voltar': 'Sair'}
-          </Text>
-        </TouchableOpacity>
-        <Image style={styles.item} source={require("../../assets/images/logo.png") }resizeMode='contain' />
-      </View>
-      <View style={styles.headerShadow}>
-      </View>
-    </>
+    <View style={styles.header}>
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={handleGoback}
+      >
+        <ArrowLeft style={styles.linkText} />
+        <Text style={styles.linkText}>
+          {navigation.canGoBack() ? 'Voltar': 'Sair'}
+        </Text>
+      </TouchableOpacity>
+      <Image style={styles.item} source={require("../../assets/images/logo.png") }resizeMode='contain' />
+    </View>
   )
 }
 
@@ -45,11 +41,7 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     left: 0,
-    paddingTop: 10,
-    paddingRight: 10
-  },
-  headerShadow: {
-    height: 60
+    height: 60,
   },
   linkText: {
     color: '#ffffff',
