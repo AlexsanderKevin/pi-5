@@ -16,7 +16,7 @@ export default function Scroll ({ children, ...props }) {
 const styles = StyleSheet.create({
   scroll: {
     marginTop: 45,
-    paddingTop: 30,
+    paddingTop: 15,
     paddingBottom: 100,
   }  
 });
