@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet} from 'react-native'
 import api from '../../services/api'
 import * as SecureStore from 'expo-secure-store'
@@ -19,8 +19,17 @@ export default function MovimentForm({navigation}) {
     const [ quantidade, setQuantidade ] = useState('')
     const [ observacao, setObservacao ] = useState('')
 
+    let id_responsavel = null;
     const id_equipamento = 3;
-    const id_responsavel = 3;
+
+    useEffect(()=>{
+        SecureStore.getItemAsync('id_usuario')
+        .then((id_usuario)=>{
+            if(id_responsavel === null){
+                id_responsavel = id_usuario
+            }
+        })
+    },[])
     
     const postMoviment = () => {
         SecureStore.getItemAsync('token')
