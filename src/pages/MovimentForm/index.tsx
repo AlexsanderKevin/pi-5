@@ -34,7 +34,7 @@ export default function MovimentForm({navigation}) {
     const postMoviment = () => {
         SecureStore.getItemAsync('token')
         .then((token) => {
-            if(token){
+            if(token && id_responsavel !== null){
                 api.post('/movimentacoes', {
                     id_responsavel: id_responsavel,
                     id_equipamento: id_equipamento,
