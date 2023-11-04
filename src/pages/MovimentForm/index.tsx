@@ -13,27 +13,24 @@ import ButtonMain from '../../components/ButtonMain/ButtonMain'
 export default function MovimentForm({navigation}) {
     const navigate = useNavigation()
 
-
     const [ status, setStatus ] = useState('')
     const [ zona, setZona ] = useState('')
     const [ quantidade, setQuantidade ] = useState('')
     const [ observacao, setObservacao ] = useState('')
 
-    let id_responsavel = null;
     const id_equipamento = 3;
-
-    useEffect(()=>{
-        SecureStore.getItemAsync('id_usuario')
-        .then((id_usuario)=>{
-            if(id_responsavel === null){
-                id_responsavel = id_usuario
-            }
-        })
-    },[])
     
     const postMoviment = () => {
+        let id_responsavel
+
+        SecureStore.getItemAsync('id_usuario')
+        .then((id_usuario)=>{
+            id_responsavel = id_usuario
+        })
+
         SecureStore.getItemAsync('token')
         .then((token) => {
+            console.log(`responsavel: ${id_responsavel}`)
             if(token && id_responsavel !== null){
                 api.post('/movimentacoes', {
                     id_responsavel: id_responsavel,
