@@ -23,7 +23,7 @@ export default function Login({navigation}) {
       SecureStore.setItemAsync('id_usuario', id_responsavel.toString())
       AsyncStorage.setItem('user', username)
       setResultado('Login feito com sucesso')
-      navigation.navigate('MovimentForm')
+      navigation.navigate('Home')
     }).catch(e => {
       console.log(`falha ao logar ${e}`)
     })
