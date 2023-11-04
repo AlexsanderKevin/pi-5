@@ -22,7 +22,7 @@ export default function Login({navigation}) {
       SecureStore.setItemAsync('token', token)
       AsyncStorage.setItem('user', username)
       setResultado('Login feito com sucesso')
-      navigation.navigate('MovimentForm')
+      navigation.navigate('Home')
     }).catch(e => {
       console.log(`falha ao logar ${e}`)
     })
@@ -46,7 +46,7 @@ export default function Login({navigation}) {
     SecureStore.getItemAsync('token')
     .then((token)=>{
       if(token!=null){
-        navigation.navigate('MovimentForm')
+        navigation.navigate('Home')
       }
     })
   },[])

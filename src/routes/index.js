@@ -6,6 +6,7 @@ import Details from "../pages/Details";
 import QrCode from "../pages/QrCode";
 import MovimentForm from "../pages/MovimentForm";
 
+
 const Stack = createNativeStackNavigator();
 
 export default function Routes() {
@@ -17,6 +18,7 @@ export default function Routes() {
             <Stack.Screen name="Equipamento" component={Details} options={{title: 'Adicionar'}} />
             <Stack.Screen name="QrCode" component={QrCode} options={{title: 'QR Code'}} />
             <Stack.Screen name="MovimentForm" component={MovimentForm} options={{title: 'Movimentar'}} />
+
         </Stack.Navigator>
     )
 }
