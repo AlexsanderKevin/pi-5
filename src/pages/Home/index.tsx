@@ -8,6 +8,9 @@ import { ListItemSubtitle } from "@rneui/base/dist/ListItem/ListItem.Subtitle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from '../../services/api'
 import * as SecureStore from 'expo-secure-store'
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
+import Scroll from "../../components/Scroll/Scroll";
 
 export default function Home({navigation}){
     const [equipamento, setEquipamentos] = useState([])
@@ -31,7 +34,8 @@ export default function Home({navigation}){
     }
     return(
         <View style={styles.container}>
-            <ScrollView style={styles.containerScrollView}>
+            <Header/>
+            <Scroll>
                 <Text>recentes</Text>
                 {
                     equipamento.length<=0 &&(
@@ -41,7 +45,8 @@ export default function Home({navigation}){
                     {
                         equipamento.map((equipamento) => (
                             <ListItem style={styles.list} key={equipamento.id} onPress={()=>{
-                                navigation.navigate("EquipmentForm",{equipamento})
+                                navigation.navigate("Equipamento",{equipamento})
+                                // navigation.navigate("Equipamento")
                             }}> 
                                 <ListItemContent>
                                     <ListItemTitle>
@@ -56,7 +61,8 @@ export default function Home({navigation}){
                     }
                 <Divider/>
                 <Button  title='Sair' onPress={sair}></Button>
-            </ScrollView>
+            </Scroll>
+            <Footer navigation={navigation}/>
         </View>
     );
 }
@@ -65,9 +71,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 15,
         backgroundColor: '#353535'
-    },
-    containerScrollView: {
-
     },
     titleInput: {
         marginTop: 5,

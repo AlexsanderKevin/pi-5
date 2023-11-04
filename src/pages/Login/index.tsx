@@ -5,23 +5,24 @@ import * as SecureStore from 'expo-secure-store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text } from '@rneui/themed'
 import api from '../../services/api'
+import Input from '../../components/Input/Input'
+import ButtonMain from '../../components/ButtonMain/ButtonMain'
 
 export default function Login({navigation}) {
   const [username, setUsername] = useState(null)
   const [password, setPassword] = useState(null)
   const [userInfo, setUserInfo]=useState ({});
 
-  const login =(username,password) =>{
-    api.get(`login`,{
-      //username,password
+  const login = (username,password) =>{
+    api.post('/login',{
+      data: {login: username, senha: password}
     }).then(res=> {
-      let userInfo = res.data;
-      setUserInfo(userInfo)
-      SecureStore.setItemAsync('token','123456')
-      AsyncStorage.setItem('userInfo',JSON.stringify(userInfo))
-      setResultado('Login feito com suecesso')
-      navigation.navigate('Home')
-      //navigation.navigate('MovimentForm')
+      let token = res.data;
+      setUserInfo(username)
+      SecureStore.setItemAsync('token', token)
+      AsyncStorage.setItem('user', username)
+      setResultado('Login feito com sucesso')
+      navigation.navigate('MovimentForm')
     }).catch(e => {
       console.log(`falha ao logar ${e}`)
     })
@@ -38,24 +39,14 @@ export default function Login({navigation}) {
       return
     }
 
-    if(email == 'admin' && senha == '1234'){
-      SecureStore.setItemAsync('token','123456')
-      AsyncStorage.setItem('user','Administrador')
-      
-      setResultado('Login feito com suecesso')
-      navigation.navigate('Home')
-      //navigation.navigate('MovimentForm')
-    } else {
-      setResultado('Login ou senha inválidos!')
-    }
+    login(email, senha)
   }
 
   useEffect(()=>{
     SecureStore.getItemAsync('token')
     .then((token)=>{
       if(token!=null){
-        navigation.navigate('Home')
-        //navigation.navigate('MovimentForm')
+        navigation.navigate('MovimentForm')
       }
     })
   },[])
@@ -63,28 +54,27 @@ export default function Login({navigation}) {
   return (
     <View style={styles.container}>
       <Image style={styles.item} source={require("../../assets/images/logo.png") }resizeMode='contain' />
-      <Text style={styles.titleInput}>Email</Text>
-      <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                placeholder='fulano@email.com'
-                placeholderTextColor="#848484"
-        />
+      <Input
+        label='Email'
+        value={email}
+        onChangeText={setEmail}
+        placeholder='fulano@email.com'
+      />
 
-      <Text style={styles.titleInput}>Senha</Text>
-      <TextInput
-                style={styles.input}
-                value={senha}
-                onChangeText={setSenha}
-                placeholder='******'
-                secureTextEntry={true}
-                placeholderTextColor="#848484"
-        />
+      <Input
+        label={'Senha'}
+        value={senha}
+        onChangeText={setSenha}
+        placeholder='******'
+        secureTextEntry={true}
+      />
 
-        <TouchableOpacity style={styles.buttonLogin} onPress={logar}>
-            <Text style={styles.titleButtonLogin}>login</Text>
-        </TouchableOpacity>
+        <ButtonMain 
+          style={styles.buttonLogin} 
+          onPress={logar}
+        >
+          login
+        </ButtonMain>
         <StatusBar style="auto" />
     </View>
   );
@@ -93,46 +83,20 @@ export default function Login({navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 15,
+        padding: 40,
         backgroundColor: '#353535',
         justifyContent: 'center',
         alignItems: 'center',
         rowGap: 5,
     },
-    titleInput: {
-        marginTop: 5,
-        marginLeft: 40,
-        fontSize: 17,
-        color: '#FFF',
-        paddingBottom: .5,
-        alignSelf:'flex-start',
-    },
-    input: {
-        marginBottom: 10,
-        padding: 5,
-        borderRadius: 5,
-        fontSize: 17,
-        color: '#FFF',
-        borderColor: 'white',
-        borderWidth: 1,
-        width: '80%',
-    },
     buttonLogin: {
-        marginTop: 10,
-        paddingVertical: 10,
-        width: '40%',
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F0865B'
-    },
-    titleButtonLogin: {
-        color: '#FFF',
-        fontSize: 17
+        width: '50%',
+        marginTop: 30
     },
     item: {
       aspectRatio:1,
       width: '70%',
-      height: 150,
+      height: 130,
+      marginBottom: 50
       },
   });
