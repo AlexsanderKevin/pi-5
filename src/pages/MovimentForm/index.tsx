@@ -30,7 +30,6 @@ export default function MovimentForm({navigation}) {
 
         SecureStore.getItemAsync('token')
         .then((token) => {
-            console.log(`responsavel: ${id_responsavel}`)
             if(token && id_responsavel !== null){
                 api.post('/movimentacoes', {
                     id_responsavel: id_responsavel,
