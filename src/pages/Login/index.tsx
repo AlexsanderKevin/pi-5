@@ -11,15 +11,16 @@ import ButtonMain from '../../components/ButtonMain/ButtonMain'
 export default function Login({navigation}) {
   const [username, setUsername] = useState(null)
   const [password, setPassword] = useState(null)
-  const [userInfo, setUserInfo]=useState ({});
+  const [userInfo, setUserInfo] = useState ({});
 
   const login = (username,password) =>{
     api.post('/login',{
       data: {login: username, senha: password}
     }).then(res=> {
-      let token = res.data;
+      let { token, id_responsavel } = res.data;
       setUserInfo(username)
       SecureStore.setItemAsync('token', token)
+      SecureStore.setItemAsync('id_usuario', id_responsavel.toString())
       AsyncStorage.setItem('user', username)
       setResultado('Login feito com sucesso')
       navigation.navigate('Home')
