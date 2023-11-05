@@ -1,11 +1,8 @@
 import { StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer';
-// import { Camera } from 'react-native-vision-camera';
-// import { useCameraDevice } from 'react-native-vision-camera/lib/typescript/hooks/useCameraDevice';
 
 export default function QrCode({ navigation }) {
-  // const device = useCameraDevice('back')
 
   return (
     <View style={styles.container}>
