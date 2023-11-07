@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet} from 'react-native'
 import api from '../../services/api'
 import * as SecureStore from 'expo-secure-store'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { useNavigation } from '@react-navigation/native'
 import Footer from '../../components/Footer/Footer'
@@ -17,16 +18,36 @@ export default function MovimentForm({navigation}) {
     const [ zona, setZona ] = useState('')
     const [ quantidade, setQuantidade ] = useState('')
     const [ observacao, setObservacao ] = useState('')
-
-    const id_equipamento = 3;
     
     const postMoviment = () => {
         let id_responsavel
+        let id_equipamento
+        let nome_equipamento
 
         SecureStore.getItemAsync('id_usuario')
         .then((id_usuario)=>{
-            id_responsavel = id_usuario
+            if(id_usuario){
+                id_responsavel = id_usuario
+            }else{
+                alert(`Você deve efetuar o login antes de realizar uma movimentação no sistema!`)
+            }
+            
         })
+
+        AsyncStorage.getItem('id_equipamento').then((id) => {
+            if(id){
+                id_equipamento = id
+            }else{
+                alert(`Faça a leitura de um QRCode válido!`)
+                return
+            }
+        });
+
+        AsyncStorage.getItem('nome_equipamento').then((nome) => {
+            if(nome){
+                nome_equipamento = nome
+            }
+        });
 
         SecureStore.getItemAsync('token')
         .then((token) => {
