@@ -5,9 +5,10 @@ import { ArrowsLeftRight, Eye } from 'phosphor-react-native'
 import Scroll from '../../components/Scroll/Scroll';
 import PageTitle from '../../components/PageTitle/PageTitle'
 import InfoCard from './InfoCard';
+import MovimentationList from './MovimentationList';
 
 export default function Details({ navigation, route }) {
-  const { nome } = route.params.equipamento
+  const { nome, id_equipamento } = route.params.equipamento
 
   return (
     <View style={styles.container}>
@@ -28,6 +29,7 @@ export default function Details({ navigation, route }) {
           <Text style={styles.historyTitle}>Histórico</Text>
         </View>
 
+        <MovimentationList id={id_equipamento}/>
       </Scroll>
       <Footer navigation={navigation}/>
     </View>
