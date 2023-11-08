@@ -25,10 +25,10 @@ export default function MovimentationList({ id }) {
     <View style={styles.container}>
       <View style={styles.containerSideLine}></View>
       {movimentation.map(movimentation => (
-        <View style={styles.cardFrame}>
+        <View style={styles.cardFrame} key={movimentation.id_movimentacao}>
           <View style={styles.cardCircle}></View>
 
-          <View style={styles.card} key={movimentation.id_movimentacao}>
+          <View style={styles.card} >
             <View>
               <Text style={styles.dateText}>{movimentation.data_entrada.slice(0, 10)}</Text>
               <Text style={styles.zoneText}>{movimentation.zona.nome}</Text>

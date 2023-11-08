@@ -1,14 +1,21 @@
 import { StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer';
-import { ArrowsLeftRight, Eye } from 'phosphor-react-native'
+import { ArrowsLeftRight, Eye, PlusCircle, PlusSquare } from 'phosphor-react-native'
 import Scroll from '../../components/Scroll/Scroll';
 import PageTitle from '../../components/PageTitle/PageTitle'
 import InfoCard from './InfoCard';
 import MovimentationList from './MovimentationList';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Details({ navigation, route }) {
   const { nome, id_equipamento } = route.params.equipamento
+
+  const redirectToMovimentationForm = () => {
+    AsyncStorage.setItem('id_equipamento', id_equipamento.toString())
+    AsyncStorage.setItem('nome_equipamento', nome)
+    navigation.navigate("MovimentForm")
+  }
 
   return (
     <View style={styles.container}>
@@ -25,8 +32,13 @@ export default function Details({ navigation, route }) {
         <InfoCard equipment={route.params.equipamento}/>
 
         <View style={styles.historyHeader}>
-          <ArrowsLeftRight style={styles.historyTitle}/>
-          <Text style={styles.historyTitle}>Histórico</Text>
+          <View style={styles.historyHeaderDiv}>
+            <ArrowsLeftRight style={styles.historyTitle}/>
+            <Text style={styles.historyTitle}>Histórico</Text>
+          </View>
+          <TouchableOpacity onPress={redirectToMovimentationForm}>
+            <PlusCircle color='#F0865B' />
+          </TouchableOpacity>
         </View>
 
         <MovimentationList id={id_equipamento}/>
@@ -58,11 +70,18 @@ const styles = StyleSheet.create({
     display: 'flex', 
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10
+    gap: 10,
+    justifyContent: 'space-between'
   },
   historyTitle: {
     fontSize: 25,
     fontFamily: 'Times New Roman',
     color: '#ffffff',
+  },
+  historyHeaderDiv: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10
   }
 });
