@@ -67,6 +67,8 @@ export default function MovimentForm({navigation}) {
                 })
                 .then(() => {navigation.navigate('Home')})
                 .catch((error) => {console.log(error.message)})
+            }else{
+                navigation.navigate('Login')
             }
         })
     }

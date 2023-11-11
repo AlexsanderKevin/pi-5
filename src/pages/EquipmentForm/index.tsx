@@ -39,6 +39,8 @@ export default function EquipmentForm({ navigation }) {
                 })
                 .then(() => {navigation.navigate('Home')})
                 .catch((error) => {console.log(error.message)})
+            }else{
+                navigation.navigate('Login')
             }
         })
     }

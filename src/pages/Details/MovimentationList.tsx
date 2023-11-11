@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store'
 import api from '../../services/api';
 
-export default function MovimentationList({ id }) {
+export default function MovimentationList({ id, navigation }) {
   const [ movimentation, setMovimentation ] = useState([])
 
   useEffect(() => {
@@ -17,6 +17,8 @@ export default function MovimentationList({ id }) {
         })
         .then((res) => setMovimentation(res.data))
         .catch((error) => console.log(error.message))
+      }else{
+        navigation.navigate('Login')
       }
     })
   }, [])

@@ -1,27 +1,19 @@
 import React, { useState, useEffect } from 'react'
+import { StyleSheet, View } from 'react-native'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 
+import api from '../../services/api'
+import * as SecureStore from 'expo-secure-store'
+import { BarCodeScanner } from 'expo-barcode-scanner'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { BarCodeScanner } from 'expo-barcode-scanner'
-
-import { 
-  StyleSheet, 
-  TextInput, 
-  TouchableOpacity, 
-  View, 
-  Text 
-} from 'react-native'
-
 export default function QrCode({navigation}) {
-  const [ hasPermission, setHasPermission ] = useState(null)
   const [ scanned, setScanned ] = useState(false)
 
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync()
-      setHasPermission(status === 'granted')
 
       if (status === null) {
         alert(`Para utilizar esta função, conceda permissão de acesso a câmera nas configurações do seu smartphone.`)
@@ -32,27 +24,58 @@ export default function QrCode({navigation}) {
     })()
   }, [])
 
-  const nonStandard = () => {
+  const nonStandard = (message) => {
     setScanned(false)
-    alert(`QRCode fora do padrão!`)
+    alert(message)
     navigation.navigate('Home')
   }
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  async function isValidEquipment(id) {
+    const token = await SecureStore.getItemAsync('token')
+    if(token){
+        try {
+          const res = await api.get(`/equipamentos/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization : token
+            }
+          })
+
+          return res.data !== null
+        }catch(error){
+          console.log(`Error message: ${error.message}`)
+          return false
+        }
+    }else{
+      navigation.navigate('Login')
+    }
+  }
+
+  const handleBarCodeScanned = async ({ type, data }) => {
+    let valid = false
+
+    setScanned(true)
+
     try{
       const { id_equipamento, nome } = JSON.parse(data)
 
       if ( id_equipamento !== undefined && nome !== undefined )
       {
-        setScanned(true)
-        AsyncStorage.setItem('id_equipamento', id_equipamento.toString())
-        AsyncStorage.setItem('nome_equipamento', nome)
-        navigation.navigate('MovimentForm')
+        valid = await isValidEquipment(id_equipamento)
+
+        if(valid) {
+          AsyncStorage.setItem('id_equipamento', id_equipamento.toString())
+          AsyncStorage.setItem('nome_equipamento', nome)
+          navigation.navigate('MovimentForm')
+        }else{
+          nonStandard(`Este equipamento não está cadastrado no sistema!`)
+        }
+        
       }else{
-        nonStandard()
+        nonStandard(`QRCode fora do padrão!`)
       }
-    }catch(err){
-      nonStandard()
+    }catch(error){
+      nonStandard(`QRCode fora do padrão!`)
     }
   }
 
