@@ -68,6 +68,7 @@ export default function MovimentForm({navigation}) {
                 .then(() => {navigation.navigate('Home')})
                 .catch((error) => {console.log(error.message)})
             }else{
+                alert(`A sua sessão expirou, efetue o login novamente!`)
                 navigation.navigate('Login')
             }
         })

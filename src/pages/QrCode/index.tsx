@@ -47,6 +47,7 @@ export default function QrCode({navigation}) {
           return false
         }
     }else{
+      alert(`A sua sessão expirou, efetue o login novamente!`)
       navigation.navigate('Login')
     }
   }

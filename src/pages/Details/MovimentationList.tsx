@@ -18,6 +18,7 @@ export default function MovimentationList({ id, navigation }) {
         .then((res) => setMovimentation(res.data))
         .catch((error) => console.log(error.message))
       }else{
+        alert(`A sua sessão expirou, efetue o login novamente!`)
         navigation.navigate('Login')
       }
     })
