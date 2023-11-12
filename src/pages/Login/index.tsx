@@ -43,15 +43,6 @@ export default function Login({navigation}) {
     login(email, senha)
   }
 
-  useEffect(()=>{
-    SecureStore.getItemAsync('token')
-    .then((token)=>{
-      if(token!=null){
-        navigation.navigate('Home')
-      }
-    })
-  },[])
-
   return (
     <View style={styles.container}>
       <Image style={styles.item} source={require("../../assets/images/logo.png") }resizeMode='contain' />
