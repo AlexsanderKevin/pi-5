@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
 import api from '../../services/api'
+import isValidToken from '../../middlewares/verifyToken'
+import messages from '../../utils/messages'
 
 import { useNavigation } from '@react-navigation/native'
 import Footer from '../../components/Footer/Footer'
@@ -20,30 +22,30 @@ export default function EquipmentForm({ navigation }) {
     const [ unidade_medida, setUnidadeMedida ] = useState('')
     const [ prioridade, setPrioridade ] = useState('')
 
-    const postEquipment = () => {
-        SecureStore.getItemAsync('token')
-        .then((token) => {
-            if(token){
-                api.post('/equipamentos', {
-                    nome: nome,
-                    codigo_sap: sap,
-                    id_tipo: tipo,
-                    descricao: descricao,
-                    unidade_medida: unidade_medida,
-                    prioridade: prioridade
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization : token
-                    }
-                })
-                .then(() => {navigation.navigate('Home')})
-                .catch((error) => {console.log(error.message)})
-            }else{
-                alert(`A sua sessão expirou, efetue o login novamente!`)
-                navigation.navigate('Login')
-            }
-        })
+    const postEquipment = async () => {
+        const token = await SecureStore.getItemAsync('token')
+        const validToken = await isValidToken(token)
+
+        if(validToken){
+            api.post('/equipamentos', {
+                nome: nome,
+                codigo_sap: sap,
+                id_tipo: tipo,
+                descricao: descricao,
+                unidade_medida: unidade_medida,
+                prioridade: prioridade
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization : token
+                }
+            })
+            .then(() => {navigation.navigate('Home')})
+            .catch((error) => {console.log(error.message)})
+        }else{
+            alert(messages.SESSAO_EXPIRADA)
+            navigation.navigate('Login')
+        }
     }
 
     return (

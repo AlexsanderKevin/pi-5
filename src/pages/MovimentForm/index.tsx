@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet} from 'react-native'
 import api from '../../services/api'
 import * as SecureStore from 'expo-secure-store'
+import isValidToken from '../../middlewares/verifyToken'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import messages from '../../utils/messages'
 
 import { useNavigation } from '@react-navigation/native'
 import Footer from '../../components/Footer/Footer'
@@ -29,7 +31,8 @@ export default function MovimentForm({navigation}) {
             if(id_usuario){
                 id_responsavel = id_usuario
             }else{
-                alert(`Você deve efetuar o login antes de realizar uma movimentação no sistema!`)
+                alert(messages.EFETUAR_LOGIN_ANTES_MOVIMENTACAO)
+                navigation.navigate('Login')
             }
             
         })
@@ -38,8 +41,8 @@ export default function MovimentForm({navigation}) {
             if(id){
                 id_equipamento = id
             }else{
-                alert(`Faça a leitura de um QRCode válido!`)
-                return
+                alert(messages.QRCODE_FORA_DO_PADRAO)
+                navigation.navigate('Home')
             }
         });
 
@@ -50,8 +53,10 @@ export default function MovimentForm({navigation}) {
         });
 
         SecureStore.getItemAsync('token')
-        .then((token) => {
-            if(token && id_responsavel !== null){
+        .then(async (token) => {
+            const validToken = await isValidToken(token)
+
+            if(validToken && id_responsavel !== null){
                 api.post('/movimentacoes', {
                     id_responsavel: id_responsavel,
                     id_equipamento: id_equipamento,
@@ -68,7 +73,7 @@ export default function MovimentForm({navigation}) {
                 .then(() => {navigation.navigate('Home')})
                 .catch((error) => {console.log(error.message)})
             }else{
-                alert(`A sua sessão expirou, efetue o login novamente!`)
+                alert(messages.SESSAO_EXPIRADA)
                 navigation.navigate('Login')
             }
         })

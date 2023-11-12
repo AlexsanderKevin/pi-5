@@ -1,14 +1,18 @@
 import { StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native'
+import isValidToken from '../../middlewares/verifyToken'
 import { useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store'
+import messages from '../../utils/messages';
 import api from '../../services/api';
 
 export default function MovimentationList({ id, navigation }) {
   const [ movimentation, setMovimentation ] = useState([])
 
   useEffect(() => {
-    SecureStore.getItemAsync('token').then(token => {
-      if (token) {
+    SecureStore.getItemAsync('token').then(async token => {
+      const validToken = await isValidToken(token)
+
+      if (validToken) {
         api.get(`/movimentacoes/equipamentos/${id}`, {
           headers: {
             'Content-Type': 'application/json',
@@ -18,7 +22,7 @@ export default function MovimentationList({ id, navigation }) {
         .then((res) => setMovimentation(res.data))
         .catch((error) => console.log(error.message))
       }else{
-        alert(`A sua sessão expirou, efetue o login novamente!`)
+        alert(messages.SESSAO_EXPIRADA)
         navigation.navigate('Login')
       }
     })

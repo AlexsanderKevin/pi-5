@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
+import messages from '../../utils/messages'
 
 import api from '../../services/api'
 import * as SecureStore from 'expo-secure-store'
 import { BarCodeScanner } from 'expo-barcode-scanner'
+import isValidToken from '../../middlewares/verifyToken'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function QrCode({navigation}) {
@@ -16,10 +18,10 @@ export default function QrCode({navigation}) {
       const { status } = await BarCodeScanner.requestPermissionsAsync()
 
       if (status === null) {
-        alert(`Para utilizar esta função, conceda permissão de acesso a câmera nas configurações do seu smartphone.`)
+        alert(messages.SOLICITAR_PERMISSAO_CAMERA)
       }
       if (status !== 'granted') {
-        alert(`Sem permissão de acesso à câmera!`)
+        alert(messages.SEM_PERMISSAO_CAMERA)
       }
     })()
   }, [])
@@ -32,7 +34,9 @@ export default function QrCode({navigation}) {
 
   async function isValidEquipment(id) {
     const token = await SecureStore.getItemAsync('token')
-    if(token){
+    const validToken = await isValidToken(token)
+
+    if(validToken){
         try {
           const res = await api.get(`/equipamentos/${id}`, {
             headers: {
@@ -43,12 +47,13 @@ export default function QrCode({navigation}) {
 
           return res.data !== null
         }catch(error){
-          console.log(`Error message: ${error.message}`)
+          console.log(`${messages.ERROR_MESSAGE} ${error.message}`)
           return false
         }
     }else{
-      alert(`A sua sessão expirou, efetue o login novamente!`)
+      alert(messages.SESSAO_EXPIRADA)
       navigation.navigate('Login')
+      throw new Error(messages.TOKEN_EXPIRED)
     }
   }
 
@@ -69,14 +74,15 @@ export default function QrCode({navigation}) {
           AsyncStorage.setItem('nome_equipamento', nome)
           navigation.navigate('MovimentForm')
         }else{
-          nonStandard(`Este equipamento não está cadastrado no sistema!`)
+          nonStandard(messages.EQUIPAMENTO_NAO_CADASTRADO)
         }
         
       }else{
-        nonStandard(`QRCode fora do padrão!`)
+        nonStandard(messages.QRCODE_FORA_DO_PADRAO)
       }
     }catch(error){
-      nonStandard(`QRCode fora do padrão!`)
+      if(error.message !== messages.TOKEN_EXPIRED)
+        nonStandard(messages.QRCODE_FORA_DO_PADRAO)
     }
   }
 
