@@ -7,6 +7,7 @@ import api from '../../services/api'
 import Input from '../../components/Input/Input'
 import ButtonMain from '../../components/ButtonMain/ButtonMain'
 import messages from '../../utils/messages'
+import criptografar from '../../utils/rsa'
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState('')
@@ -16,7 +17,7 @@ export default function Login({navigation}) {
 
   const login = async (username,password) =>{
     api.post('/login',{
-      data: {login: username, senha: password}
+      data: {login: username, senha: criptografar(password)}
     }).then(async res=> {
       let { token, id_responsavel } = res.data;
       setUserInfo(username)
