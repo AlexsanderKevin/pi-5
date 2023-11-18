@@ -27,8 +27,13 @@ export default function Login({navigation}) {
       setResultado(messages.LOGIN_REALIZADO)
       navigation.navigate('Home')
     }).catch(e => {
-      alert(`${messages.ERROR_TENTE_NOVAMENTE} ${e}`)
-    })
+      const { message } = e.response.data
+      if (message) {
+        alert(`${messages.ERROR_TENTE_NOVAMENTE} ${message}`)
+      }else {
+        alert(`${messages.ERROR_TENTE_NOVAMENTE} ${e} `)
+      }
+  });
   }
 
   const logar = async () => {
