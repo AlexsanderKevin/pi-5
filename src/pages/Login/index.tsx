@@ -1,56 +1,50 @@
 import { StatusBar } from 'expo-status-bar'
-import { useEffect, useState } from 'react'
-import { StyleSheet, TextInput, TouchableOpacity, View,Image } from 'react-native'
+import { useState } from 'react'
+import { StyleSheet, View,Image } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Text } from '@rneui/themed'
 import api from '../../services/api'
 import Input from '../../components/Input/Input'
 import ButtonMain from '../../components/ButtonMain/ButtonMain'
+import messages from '../../utils/messages'
+import criptografar from '../../utils/rsa'
 
 export default function Login({navigation}) {
-  const [username, setUsername] = useState(null)
-  const [password, setPassword] = useState(null)
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
   const [userInfo, setUserInfo] = useState ({});
+  const [resultado, setResultado] = useState(messages.DIGITE_SEUS_DADOS)
 
-  const login = (username,password) =>{
+  const login = async (username,password) =>{
     api.post('/login',{
-      data: {login: username, senha: password}
-    }).then(res=> {
+      data: {login: username, senha: criptografar(password)}
+    }).then(async res=> {
       let { token, id_responsavel } = res.data;
       setUserInfo(username)
       SecureStore.setItemAsync('token', token)
       SecureStore.setItemAsync('id_usuario', id_responsavel.toString())
       AsyncStorage.setItem('user', username)
-      setResultado('Login feito com sucesso')
+      setResultado(messages.LOGIN_REALIZADO)
       navigation.navigate('Home')
     }).catch(e => {
-      console.log(`falha ao logar ${e}`)
-    })
+      const { message } = e.response.data
+      if (message) {
+        alert(`${messages.ERROR_TENTE_NOVAMENTE} ${message}`)
+      }else {
+        alert(`${messages.ERROR_TENTE_NOVAMENTE} ${e} `)
+      }
+  });
   }
 
-  const [resultado, setResultado] = useState('Digite seus dados')
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-
-  const logar = () => {
+  const logar = async () => {
 
     if(email == '' && senha == ''){
-      setResultado('Digite login e senha!!!')
+      setResultado(messages.DIGITE_LOGIN_E_SENHA)
       return
     }
 
     login(email, senha)
   }
-
-  useEffect(()=>{
-    SecureStore.getItemAsync('token')
-    .then((token)=>{
-      if(token!=null){
-        navigation.navigate('Home')
-      }
-    })
-  },[])
 
   return (
     <View style={styles.container}>
