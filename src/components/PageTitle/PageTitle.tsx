@@ -3,9 +3,12 @@ import { StyleSheet, View, Text } from 'react-native'
 export default function PageTitle({ title, icon, children }) {
   return (
     <View style={styles.pageHeader}>
-      { icon }
-      <Text style={styles.pageHeaderText}>{ title }</Text>
-      {children}
+      <View style={styles.row}>
+        { icon }
+        <Text style={styles.pageHeaderText}>{ title }</Text>
+      </View>
+
+      { children && (<Text style={styles.pageHeaderSubText}>{ children }</Text>)}
     </View>
   )
 }
@@ -17,13 +20,23 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: 10,
     display: 'flex',
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'center',
-    marginBottom: 20
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    marginBottom: 30
   },
   pageHeaderText: {
     color: '#ffffff50',
     fontSize: 20,
+  },
+  pageHeaderSubText: {
+    color: '#ffffff',
+    fontSize: 30,
+    fontFamily: 'Times New Roman',
+    width: '100%',
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
   }
 });

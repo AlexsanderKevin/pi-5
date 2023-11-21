@@ -12,6 +12,8 @@ import Header from '../../components/Header/Header'
 import Input from '../../components/Input/Input'
 import Scroll from '../../components/Scroll/Scroll'
 import ButtonMain from '../../components/ButtonMain/ButtonMain'
+import PageTitle from '../../components/PageTitle/PageTitle'
+import { ArrowsLeftRight } from 'phosphor-react-native'
 
 export default function MovimentForm({navigation}) {
     const navigate = useNavigation()
@@ -20,6 +22,13 @@ export default function MovimentForm({navigation}) {
     const [ zona, setZona ] = useState('')
     const [ quantidade, setQuantidade ] = useState('')
     const [ observacao, setObservacao ] = useState('')
+    const [ equipamento, setEquipamento ] = useState('')
+
+    useEffect(() => {
+        AsyncStorage.getItem('nome_equipamento').then((nome) => {
+            if(nome) setEquipamento(nome)
+        });
+    }, [])
     
     const postMoviment = () => {
         let id_responsavel
@@ -83,6 +92,12 @@ export default function MovimentForm({navigation}) {
         <View style={styles.container}>
             <Header/>
             <Scroll>
+                <PageTitle
+                    title={'Movimentar'}
+                    icon={<ArrowsLeftRight color={'#ffffff50'}/>}
+                >
+                    { equipamento } 
+                </PageTitle>
                 <Input
                     label={'Status'}
                     value={status}
