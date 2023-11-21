@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet} from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import api from '../../services/api'
 import * as SecureStore from 'expo-secure-store'
 import isValidToken from '../../middlewares/verifyToken'
@@ -14,20 +14,52 @@ import Scroll from '../../components/Scroll/Scroll'
 import ButtonMain from '../../components/ButtonMain/ButtonMain'
 import PageTitle from '../../components/PageTitle/PageTitle'
 import { ArrowsLeftRight } from 'phosphor-react-native'
+import PickerComponent from '../../components/PickerComponent/PickerComponent'
 
 export default function MovimentForm({navigation}) {
     const navigate = useNavigation()
 
     const [ status, setStatus ] = useState('')
-    const [ zona, setZona ] = useState('')
+    const [ zona, setZona ] = useState(1)
     const [ quantidade, setQuantidade ] = useState('')
     const [ observacao, setObservacao ] = useState('')
     const [ equipamento, setEquipamento ] = useState('')
+    const [ zonas, setZonas ] = useState([])
 
-    useEffect(() => {
+    const getEquipmentName = () => {
         AsyncStorage.getItem('nome_equipamento').then((nome) => {
             if(nome) setEquipamento(nome)
         });
+    }
+
+    const getZonas = () => {
+        SecureStore.getItemAsync('token').then(async token => {
+        const validToken = await isValidToken(token)
+
+        if (validToken) {
+            api.get(`/zonas`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization : token
+            }
+            })
+            .then((res) => {
+                setZonas(res.data.map(item => {
+                    return { label: item.nome, index: item.id_zona }
+                }))
+                console.log(zonas)
+            })
+            .catch((error) => console.log(error.message))
+        }else{
+            alert(messages.SESSAO_EXPIRADA)
+            navigation.navigate('Login')
+        }
+        })
+    }
+
+    useEffect(() => {
+        getEquipmentName()
+        getZonas()
     }, [])
     
     const postMoviment = () => {
@@ -105,11 +137,11 @@ export default function MovimentForm({navigation}) {
                     placeholder='Em andamento'
                 />
 
-                <Input
-                    label={'Zona'}
+                <PickerComponent
+                    label='Zona'
+                    items={zonas}
                     value={zona}
-                    onChangeText={setZona}
-                    placeholder='Armario 1'
+                    onChangeValue={(itemIndex, itemLabel) => setZona(itemIndex) }
                 />
 
                 <Input
@@ -150,5 +182,5 @@ const styles = StyleSheet.create({
     titleButtonMover: {
         color: '#FFF',
         fontSize: 17
-    }
+    },
 })
