@@ -11,6 +11,8 @@ import Header from '../../components/Header/Header'
 import Input from '../../components/Input/Input'
 import Scroll from '../../components/Scroll/Scroll'
 import ButtonMain from '../../components/ButtonMain/ButtonMain'
+import PageTitle from '../../components/PageTitle/PageTitle'
+import { ListPlus } from 'phosphor-react-native'
 
 export default function EquipmentForm({ navigation }) {
     const navigate = useNavigation()
@@ -52,6 +54,10 @@ export default function EquipmentForm({ navigation }) {
         <View style={styles.container}>
             <Header/>
             <Scroll >
+                <PageTitle
+                    title={'Adicionar'}
+                    icon={<ListPlus color={'#ffffff50'}/>}
+                >{ null }</PageTitle>
                 <Input
                     label={'Nome'}
                     value={nome}
