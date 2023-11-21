@@ -47,7 +47,6 @@ export default function MovimentForm({navigation}) {
                 setZonas(res.data.map(item => {
                     return { label: item.nome, index: item.id_zona }
                 }))
-                console.log(zonas)
             })
             .catch((error) => console.log(error.message))
         }else{
