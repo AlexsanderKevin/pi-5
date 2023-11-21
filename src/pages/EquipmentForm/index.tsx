@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
 import api from '../../services/api'
@@ -11,6 +11,9 @@ import Header from '../../components/Header/Header'
 import Input from '../../components/Input/Input'
 import Scroll from '../../components/Scroll/Scroll'
 import ButtonMain from '../../components/ButtonMain/ButtonMain'
+import PageTitle from '../../components/PageTitle/PageTitle'
+import { ListPlus } from 'phosphor-react-native'
+import PickerComponent from '../../components/PickerComponent/PickerComponent'
 
 export default function EquipmentForm({ navigation }) {
     const navigate = useNavigation()
@@ -21,6 +24,35 @@ export default function EquipmentForm({ navigation }) {
     const [ descricao, setDescricao ] = useState('')
     const [ unidade_medida, setUnidadeMedida ] = useState('')
     const [ prioridade, setPrioridade ] = useState('')
+    const [ tipoList, setTipoList ] = useState([])
+
+    const getTipoList = () => {
+        SecureStore.getItemAsync('token').then(async token => {
+        const validToken = await isValidToken(token)
+
+        if (validToken) {
+            api.get(`/tipos`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization : token
+            }
+            })
+            .then((res) => {
+                setTipoList(res.data.map(item => {
+                    return { label: item.nome, index: item.id_tipo }
+                }))
+            })
+            .catch((error) => console.log(error.message))
+        }else{
+            alert(messages.SESSAO_EXPIRADA)
+            navigation.navigate('Login')
+        }
+        })
+    }
+
+    useEffect(() => {
+        getTipoList()
+    }, [])
 
     const postEquipment = async () => {
         const token = await SecureStore.getItemAsync('token')
@@ -52,6 +84,10 @@ export default function EquipmentForm({ navigation }) {
         <View style={styles.container}>
             <Header/>
             <Scroll >
+                <PageTitle
+                    title={'Adicionar'}
+                    icon={<ListPlus color={'#ffffff50'}/>}
+                >{ null }</PageTitle>
                 <Input
                     label={'Nome'}
                     value={nome}
@@ -66,11 +102,11 @@ export default function EquipmentForm({ navigation }) {
                     placeholder='1234'
                 />
 
-                <Input
-                    label={'Tipo'}
+                <PickerComponent
+                    label='Tipo'
+                    items={tipoList}
                     value={tipo}
-                    onChangeText={setTipo}
-                    placeholder='Periferico'
+                    onChangeValue={(itemIndex, itemLabel) => setTipo(itemIndex) }
                 />
 
                 <Input

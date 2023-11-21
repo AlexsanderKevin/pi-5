@@ -19,7 +19,7 @@ export default function MovimentationList({ id, navigation }) {
             Authorization : token
           }
         })
-        .then((res) => setMovimentation(res.data))
+        .then((res) => setMovimentation(res.data.reverse()))
         .catch((error) => console.log(error.message))
       }else{
         alert(messages.SESSAO_EXPIRADA)
