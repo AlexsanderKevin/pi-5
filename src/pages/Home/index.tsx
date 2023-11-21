@@ -1,10 +1,6 @@
 import { StyleSheet, ScrollView, View, TouchableOpacity } from "react-native";
 import {Text, Button} from "@rneui/themed"
 import { useEffect,useState } from "react"
-import { Avatar, Divider, ListItem } from "@rneui/base";
-import { ListItemContent } from "@rneui/base/dist/ListItem/ListItem.Content";
-import { ListItemTitle } from "@rneui/base/dist/ListItem/ListItem.Title";
-import { ListItemSubtitle } from "@rneui/base/dist/ListItem/ListItem.Subtitle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from '../../services/api'
 import * as SecureStore from 'expo-secure-store'
@@ -16,7 +12,6 @@ import ButtonMain from "../../components/ButtonMain/ButtonMain";
 
 export default function Home({navigation}){
     const [equipamento, setEquipamentos] = useState([])
-    const [nomeUser, setNomeUser] = useState('')
 
     useEffect(()=>{
         api.get('/equipamentos')
@@ -51,7 +46,7 @@ export default function Home({navigation}){
                     { equipamento.map((equipamento) => (
                         <TouchableOpacity 
                             style={styles.listItem} 
-                            key={equipamento.id} 
+                            key={equipamento.id_equipamento} 
                             onPress={()=>{ navigation.navigate("Equipamento",{equipamento})
                         }}> 
                             <Text style={styles.itemLabel}>{equipamento.id_equipamento}</Text>
